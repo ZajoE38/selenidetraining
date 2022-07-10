@@ -17,8 +17,18 @@ import static com.codeborne.selenide.Selenide.open;
 public class RandomTableTest extends TestBase {
     @Before
     public void openPage() {
-        //1.otvorit stranku
         open(BASE_URL + "/tabulka.php");
+    }
+
+    @Test
+    public void itShouldDisplaySecondRow() {
+        // Plain old Selenium
+        System.out.println(driver.findElement(By.xpath("//table/body/tr[2]/td[4]"))
+                .getText());
+
+        // Signature using index
+        System.out.println($("table > tbody > tr",1).find("td", 3)
+                .getText());
     }
 
     @Test
