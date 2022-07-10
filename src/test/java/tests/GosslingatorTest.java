@@ -1,5 +1,7 @@
 package tests;
 
+import com.codeborne.selenide.Condition;
+import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.After;
 import org.junit.Assert;
@@ -28,15 +30,19 @@ public class GosslingatorTest {
 
     @Test
     public void itShouldDisplayTitle() {
-        Assert.assertEquals("GOSLINGATE ME", $(By.cssSelector(".ryan-title")).getText());
+        // SELENIUM
+        Assert.assertEquals("GOSLINGATE ME", driver.findElement(By.cssSelector(".ryan-title")));
+
+        // SELENIDE
+        $(".ryan-title").shouldHave(Condition.exactText("GOSLINGATE ME"));
     }
 
     @Test
-    public void itShouldFindImage(){
-        // With Selenium
-        $(By.cssSelector("img"));  // will crash with elementNotFoundException
+    public void selenideFindDemo() {
+        // SELENIUM
+        driver.findElement(By.cssSelector("img"));  // will crash with elementNotFoundException
 
-        // With Selenide
+        // SELENIDE
         // Selenide knows it is CSS selector, you need not specify with By.cssSelector()
         $("img");  // Will NOT crash
     }
@@ -45,11 +51,13 @@ public class GosslingatorTest {
     public void itShouldAddOneRyan() {
         $(By.id("addRyan")).click();
 
-        String actualNumberOfRyans = $(By.id("ryanCounter")).getText();
-        Assert.assertEquals("1", actualNumberOfRyans);
+//        String actualNumberOfRyans = $(By.id("ryanCounter")).getText();
+//        Assert.assertEquals("1", actualNumberOfRyans);
+        $("ryanCounter").shouldHave(Condition.exactText("1"));
 
         System.out.println("Number of ryans: " + $(By.cssSelector("div.ryan-counter h2")).getText());
-        Assert.assertEquals("ryan", $(By.cssSelector("div.ryan-counter h3")).getText());
+//        Assert.assertEquals("ryan", $(By.cssSelector("div.ryan-counter h3")).getText());
+        $("div.ryan-counter h3").shouldHave(Condition.exactText("ryan"));
     }
 
     @Test
@@ -57,26 +65,42 @@ public class GosslingatorTest {
         $(By.id("addRyan")).click();
         $(By.id("addRyan")).click();
 
-        String actualNumberOfRyans = $(By.id("ryanCounter")).getText();
-        String actualRyanDescription = $(By.cssSelector("div.ryan-counter h3")).getText();
+//        String actualNumberOfRyans = $(By.id("ryanCounter")).getText();
+//        String actualRyanDescription = $(By.cssSelector("div.ryan-counter h3")).getText();
+//
+//        Assert.assertEquals("2", actualNumberOfRyans);
+//        Assert.assertEquals("ryans", actualRyanDescription);
 
-        Assert.assertEquals("2", actualNumberOfRyans);
-        Assert.assertEquals("ryans", actualRyanDescription);
+        SelenideElement counter = $("ryanCounter");  // this will be in Page Object
+        counter.shouldHave(Condition.exactText("2"));
+
+        $("div.ryan-counter h3").shouldHave(Condition.exactText("ryans"));
     }
 
+    // SELENIUM
+//    @Test
+//    public void itShouldDisplayWarningMessageSelenium() {
+//        addRyan(50);
+//        Assert.assertEquals(
+//                "NUMBER OF\n" +
+//                        "RYANS\n" +
+//                        "IS TOO DAMN\n" +
+//                        "HIGH",
+//                $(By.cssSelector("h1.tooManyRyans")).getText()
+//        );
+//    }
+
+    // SELENIDE
     @Test
-    public void itShouldDisplayWarningMessage() {
-        WebElement addRyanButton = $(By.id("addRyan"));
-        for (int i = 0; i < 50; i++) {
-            addRyanButton.click();
-        }
-        Assert.assertEquals(
-                "NUMBER OF\n" +
+    public void itShouldDisplayWarningMessageSelenide() {
+        addRyan(50);
+        $(By.cssSelector("h1.tooManyRyans"))
+                .shouldHave(Condition.exactText(
+                        "NUMBER OF\n" +
                         "RYANS\n" +
                         "IS TOO DAMN\n" +
-                        "HIGH",
-                $(By.cssSelector("h1.tooManyRyans")).getText()
-        );
+                        "HIGH"
+                ));
     }
 
     @Test
@@ -88,5 +112,12 @@ public class GosslingatorTest {
     public void tearDown() {
         driver.close();
         driver.quit();
+    }
+
+    private void addRyan(int numberOfRyans) {
+        WebElement addRyanButton = $(By.id("addRyan"));
+        for (int i = 0; i < numberOfRyans; i++) {
+            addRyanButton.click();
+        }
     }
 }

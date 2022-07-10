@@ -1,5 +1,6 @@
 package tests;
 
+import com.codeborne.selenide.Condition;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -40,13 +41,27 @@ public class WaitForItTest extends TestBase {
             .until(ExpectedConditions.attributeContains(By.id("waitForProperty"),"class","error"));
     }
 
+    // Plain old Selenium
     @Test
-    public void itShouldDisplayResponseTimeMessage() {
+    public void itShouldDisplayResponseTimeMessageSelenium() {
         $(By.id("startWaitForText")).click();
 
         new WebDriverWait(driver, 10).until(ExpectedConditions.textToBePresentInElement(
-            $(By.cssSelector("div.current-wait-time")),
-            "Response time"));
-        Assert.assertTrue($(By.cssSelector("div.current-wait-time")).getText().contains("Response time"));
+            $(By.cssSelector("div.current-wait-time")),"Response time"));
+
+        Assert.assertTrue($(By.cssSelector("div.current-wait-time"))
+                .getText()
+                .contains("Response time"));
+    }
+
+    // Improved new Selenide
+    @Test
+    public void itShouldDisplayResponseTimeMessageSelenide() {
+        $(By.id("startWaitForText")).click();
+
+        $("div.current-wait-time").shouldHave(Condition.text("Response time was"));
+
+        // Condition class could be imported and static method text() could be used directly
+        // $("div.current-wait-time").shouldHave(text("Response time was"));
     }
 }
