@@ -1,6 +1,9 @@
 package tests;
 
 import base.TestBase;
+import com.codeborne.selenide.CollectionCondition;
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,8 +15,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class SpelleologyTest extends TestBase {
 
@@ -23,7 +25,7 @@ public class SpelleologyTest extends TestBase {
     }
 
     @Test
-    public void itShouldContainSpells() {
+    public void itShouldContainSpellsSelenium() {
         String[] spellsToBePresent = {
                 "counters sonorus",
                 "erases memories",
@@ -33,6 +35,7 @@ public class SpelleologyTest extends TestBase {
 
         new WebDriverWait(driver, 10)
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("ul.spells li")));
+
         List<String> displayedSpells = driver.findElements(By.cssSelector("ul.spells li"))
                 .stream()
                 .map(WebElement::getText)
@@ -44,11 +47,28 @@ public class SpelleologyTest extends TestBase {
     }
 
     @Test
-    public void itShouldDisplayTortureSpell() {
-        new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("ul.spells li")));
-        List<WebElement> spellElements = driver.findElements(By.cssSelector("ul.spells li"));
+    public void itShouldContainSpellsSelenide() {
+        String[] spellsToBePresent = {
+                "counters sonorus",
+                "erases memories",
+                "counterspells",
+                "controls a person – unforgivable"
+        };
 
+        List<String> displayedSpells = $$("ul.spells li")
+                .shouldHave(CollectionCondition.sizeGreaterThan(0))
+                .stream()
+                .map(SelenideElement::getText)
+                .collect(Collectors.toList());
+
+        for (String spellToCheck : spellsToBePresent) {
+            Assert.assertTrue(displayedSpells.contains(spellToCheck));
+        }
+    }
+
+    @Test
+    public void itShouldDisplayTortureSpell() {
+        ElementsCollection spellElements = $$("ul.spells li");
         for (WebElement spellElement : spellElements) {
             if (spellElement.getText().equals("tortures a person")) {
                 spellElement.click();
