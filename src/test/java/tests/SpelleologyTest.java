@@ -118,6 +118,20 @@ public class SpelleologyTest extends TestBase {
     }
 
     @Test
+    public void itShouldExcludeSpells() {
+        $("ul.spells")
+                .findAll("li")
+                .shouldHave(sizeGreaterThan(1))
+//                .filterBy(matchText("^shoots.*"))
+                .exclude(readonly)
+                .exclude(hidden)
+                .exclude(matchText("^opens.*"))
+                .exclude(matchText("^shoots.*"))
+                .exclude(matchText("^[a|b|c].*"))
+                .forEach(selenideElement -> System.out.println(selenideElement.getText()));
+    }
+
+    @Test
     public void itShouldFilterSpells() {
 
         $("input").sendKeys("tortures a person");
