@@ -1,8 +1,6 @@
 package tests;
 
 import base.TestBase;
-import com.codeborne.selenide.CollectionCondition;
-import com.codeborne.selenide.ElementsCollection;
 import com.codeborne.selenide.SelenideElement;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,10 +10,14 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.FileNotFoundException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.codeborne.selenide.CollectionCondition.*;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selenide.*;
+import static utils.DataUtils.getExpectedSpells;
 
 public class SpelleologyTest extends TestBase {
 
@@ -26,6 +28,7 @@ public class SpelleologyTest extends TestBase {
 
     @Test
     public void itShouldContainSpellsSelenium() {
+
         String[] spellsToBePresent = {
                 "counters sonorus",
                 "erases memories",
@@ -47,45 +50,82 @@ public class SpelleologyTest extends TestBase {
     }
 
     @Test
-    public void itShouldContainSpellsSelenide() {
-        String[] spellsToBePresent = {
-                "counters sonorus",
-                "erases memories",
-                "counterspells",
-                "controls a person – unforgivable"
-        };
+    public void itShouldContainSpellsSelenide() throws FileNotFoundException {
 
+        List<String> spellsToBePresent = getExpectedSpells();
+
+        // The Good
         List<String> displayedSpells = $$("ul.spells li")
-                .shouldHave(CollectionCondition.sizeGreaterThan(0))
+                .shouldHave(sizeGreaterThan(1))
+                .stream()
+                .map(SelenideElement::getText)
+                .collect(Collectors.toList());
+
+        // The Better
+        List<String> displayedSpellsAlt = $("ul.spells").$$("li")
+                .shouldHave(sizeGreaterThan(1))
+                .stream()
+                .map(SelenideElement::getText)
+                .collect(Collectors.toList());
+
+        // The Best
+        List<String> displayedSpellsFind = $("ul.spells")
+                .findAll("li")
+                .shouldHave(sizeGreaterThan(1))
                 .stream()
                 .map(SelenideElement::getText)
                 .collect(Collectors.toList());
 
         for (String spellToCheck : spellsToBePresent) {
             Assert.assertTrue(displayedSpells.contains(spellToCheck));
+//            Assert.assertTrue(displayedSpells.equals(spellToCheck));
         }
+
+        // The Bestest
+        // Doesn't work with arrays (use AssertJ)
+        $("ul.spells")
+                .findAll("li")
+                .shouldHave(sizeGreaterThan(1))
+                .shouldHave(texts(spellsToBePresent));
+//                .shouldHave(exactTexts(spellsToBePresent));
+
     }
 
     @Test
     public void itShouldDisplayTortureSpell() {
-        ElementsCollection spellElements = $$("ul.spells li");
-        for (WebElement spellElement : spellElements) {
-            if (spellElement.getText().equals("tortures a person")) {
-                spellElement.click();
-            }
-        }
-        new WebDriverWait(driver, 10)
-                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.modal-container")));
-        WebElement modal = $(By.cssSelector("div.modal-container"));
-        Assert.assertTrue(modal.getText().contains("Crucio"));
+
+//        ElementsCollection spellElements = $$("ul.spells li").shouldHave(sizeGreaterThan(1));
+        $("ul.spells li")
+                .findAll("li")
+                .shouldHave(sizeGreaterThan(1))
+                .find(exactText("tortures a person"))
+                .click();
+
+        // handled above
+//        for (WebElement spellElement : spellElements) {
+//            if (spellElement.getText().equals("tortures a person")) {
+//                spellElement.click();
+//            }
+//        }
+
+//        new WebDriverWait(driver, 10)
+//                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.modal-container")));
+//        WebElement modal = $(By.cssSelector("div.modal-container"));
+//        Assert.assertTrue(modal.getText().contains("Crucio"));
+        $("div.modal-container")
+                .should(appear)
+                .shouldHave(text("Crucio"));
     }
 
     @Test
     public void itShouldFilterSpells() {
-        $(By.cssSelector("input")).sendKeys("tortures a person");
-        new WebDriverWait(driver, 10).until(ExpectedConditions
-                .numberOfElementsToBe(By.cssSelector("ul.spells li"), 1));
-        Assert.assertEquals(driver.findElements(By.cssSelector("ul.spells li")).size(), 1);
+
+        $("input").sendKeys("tortures a person");
+
+        $$("ul.spells li").shouldHave(size(1));
+//        new WebDriverWait(driver, 10).until(ExpectedConditions
+//                .numberOfElementsToBe(By.cssSelector("ul.spells li"), 1));
+//        Assert.assertEquals(driver.findElements(By.cssSelector("ul.spells li")).size(), 1);
     }
 
 }

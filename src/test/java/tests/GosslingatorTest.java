@@ -1,6 +1,5 @@
 package tests;
 
-import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.SelenideElement;
 import com.codeborne.selenide.WebDriverRunner;
 import org.junit.After;
@@ -11,8 +10,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
 
+import static com.codeborne.selenide.Condition.exactText;
+import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
@@ -34,7 +34,7 @@ public class GosslingatorTest {
         Assert.assertEquals("GOSLINGATE ME", driver.findElement(By.cssSelector(".ryan-title")));
 
         // SELENIDE
-        $(".ryan-title").shouldHave(Condition.exactText("GOSLINGATE ME"));
+        $(".ryan-title").shouldHave(exactText("GOSLINGATE ME"));
     }
 
     @Test
@@ -49,21 +49,15 @@ public class GosslingatorTest {
 
     @Test
     public void itShouldAddOneRyan() {
-        $(By.id("addRyan")).click();
+        addRyan();
 
-//        String actualNumberOfRyans = $(By.id("ryanCounter")).getText();
-//        Assert.assertEquals("1", actualNumberOfRyans);
-        $("ryanCounter").shouldHave(Condition.exactText("1"));
-
-        System.out.println("Number of ryans: " + $(By.cssSelector("div.ryan-counter h2")).getText());
-//        Assert.assertEquals("ryan", $(By.cssSelector("div.ryan-counter h3")).getText());
-        $("div.ryan-counter h3").shouldHave(Condition.exactText("ryan"));
+        $("div.ryan-counter h2").shouldHave(text("1"));
+        $("div.ryan-counter h3").shouldHave(text("ryan"));
     }
 
     @Test
     public void itShouldTwoRyans() {
-        $(By.id("addRyan")).click();
-        $(By.id("addRyan")).click();
+        addRyan(2);
 
 //        String actualNumberOfRyans = $(By.id("ryanCounter")).getText();
 //        String actualRyanDescription = $(By.cssSelector("div.ryan-counter h3")).getText();
@@ -72,30 +66,30 @@ public class GosslingatorTest {
 //        Assert.assertEquals("ryans", actualRyanDescription);
 
         SelenideElement counter = $("ryanCounter");  // this will be in Page Object
-        counter.shouldHave(Condition.exactText("2"));
+        counter.shouldHave(exactText("2"));
 
-        $("div.ryan-counter h3").shouldHave(Condition.exactText("ryans"));
+        $("div.ryan-counter h3").shouldHave(exactText("ryans"));
     }
 
     // SELENIUM
-//    @Test
-//    public void itShouldDisplayWarningMessageSelenium() {
-//        addRyan(50);
-//        Assert.assertEquals(
-//                "NUMBER OF\n" +
-//                        "RYANS\n" +
-//                        "IS TOO DAMN\n" +
-//                        "HIGH",
-//                $(By.cssSelector("h1.tooManyRyans")).getText()
-//        );
-//    }
+    @Test
+    public void itShouldDisplayWarningMessageSelenium() {
+        addRyan(50);
+        Assert.assertEquals(
+                "NUMBER OF\n" +
+                        "RYANS\n" +
+                        "IS TOO DAMN\n" +
+                        "HIGH",
+                $(By.cssSelector("h1.tooManyRyans")).getText()
+        );
+    }
 
     // SELENIDE
     @Test
     public void itShouldDisplayWarningMessageSelenide() {
         addRyan(50);
         $(By.cssSelector("h1.tooManyRyans"))
-                .shouldHave(Condition.exactText(
+                .shouldHave(exactText(
                         "NUMBER OF\n" +
                         "RYANS\n" +
                         "IS TOO DAMN\n" +
@@ -114,8 +108,12 @@ public class GosslingatorTest {
         driver.quit();
     }
 
+    private void addRyan() {
+        $(By.id("addRyan")).click();
+    }
+
     private void addRyan(int numberOfRyans) {
-        WebElement addRyanButton = $(By.id("addRyan"));
+        SelenideElement addRyanButton = $(By.id("addRyan"));
         for (int i = 0; i < numberOfRyans; i++) {
             addRyanButton.click();
         }

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import com.codeborne.selenide.ElementsCollection;
+import com.codeborne.selenide.SelenideElement;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,8 +29,8 @@ public class FellowshipTest extends TestBase {
 
     @Test
     public void itShouldContainNameForEachFellow() {
-        List<WebElement> fellowElements = getFellowElements();
-
+//        List<WebElement> fellowElements = getFellowElements();
+        ElementsCollection fellowElements = getFellowElements();
         for (WebElement fellowElement : fellowElements) {
             Assert.assertFalse(fellowElement.findElement(By.cssSelector("h1")).getText().isEmpty());
         }
@@ -36,7 +38,8 @@ public class FellowshipTest extends TestBase {
 
     @Test
     public void itShouldContainSpecifiedFellows() {
-        List<WebElement> fellowElements = getFellowElements();
+//        List<WebElement> fellowElements = getFellowElements();
+        ElementsCollection fellowElements = getFellowElements();
         List<String> fellowNames = new ArrayList<String>();
 
         for (WebElement fellowElement : fellowElements) {
@@ -66,7 +69,8 @@ public class FellowshipTest extends TestBase {
 
     @Test
     public void itShouldDisplayPointsForEachFellow() {
-        List<WebElement> displayedFellows = getFellowElements();
+//        List<WebElement> displayedFellows = getFellowElements();
+        ElementsCollection displayedFellows = getFellowElements();
         for (WebElement displayedFellow : displayedFellows) {
 
             String actualPoints = displayedFellow.findElement(By.cssSelector("div.fellow-points h2")).getText();
@@ -112,7 +116,11 @@ public class FellowshipTest extends TestBase {
         $(byText(fellowName)).click();
     }
 
-    private List<WebElement> getFellowElements() {
-        return driver.findElements(By.cssSelector("ul.list-of-fellows li"));
+//    private List<WebElement> getFellowElements() {
+//        return driver.findElements(By.cssSelector("ul.list-of-fellows li"));
+//    }
+
+    private ElementsCollection getFellowElements() {
+        return $$("ul.list-of-fellows li");
     }
 }
