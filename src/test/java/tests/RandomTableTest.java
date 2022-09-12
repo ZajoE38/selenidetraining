@@ -15,6 +15,7 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class RandomTableTest extends TestBase {
+
     @Before
     public void openPage() {
         open(BASE_URL + "/tabulka.php");
@@ -22,11 +23,11 @@ public class RandomTableTest extends TestBase {
 
     @Test
     public void itShouldDisplaySecondRow() {
-        // Plain old Selenium
+        // Selenium
         System.out.println(driver.findElement(By.xpath("//table/body/tr[2]/td[4]"))
                 .getText());
 
-        // Signature using index
+        // Selenide
         System.out.println($("table > tbody > tr",1).find("td", 3)
                 .getText());
     }
@@ -48,10 +49,11 @@ public class RandomTableTest extends TestBase {
         }
     }
 
-    @Test
+    @Test // SCROLL
     public void itShouldScrollToLastElement() {
-        WebElement lastRow = $(By.cssSelector("table > tbody > tr:last-child"));
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", lastRow);
+        // WebElement lastRow = driver.findElement(By.cssSelector("table > tbody > tr:last-child"));
+        // ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", lastRow);
+        $(By.cssSelector("table > tbody > tr:last-child")).scrollIntoView(false);
     }
 
     private List<WebElement> getRows() {

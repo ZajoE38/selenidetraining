@@ -78,16 +78,16 @@ public class SpelleologyTest extends TestBase {
 
         for (String spellToCheck : spellsToBePresent) {
             Assert.assertTrue(displayedSpells.contains(spellToCheck));
-//            Assert.assertTrue(displayedSpells.equals(spellToCheck));
+            // Assert.assertTrue(displayedSpells.equals(spellToCheck));
         }
 
         // The Bestest
-        // Doesn't work with arrays (use AssertJ)
+        // Doesn't work with arrays though (use AssertJ)
         $("ul.spells")
                 .findAll("li")
                 .shouldHave(sizeGreaterThan(1))
                 .shouldHave(texts(spellsToBePresent));
-//                .shouldHave(exactTexts(spellsToBePresent));
+                //.shouldHave(exactTexts(spellsToBePresent));
 
     }
 
@@ -100,21 +100,22 @@ public class SpelleologyTest extends TestBase {
                 .shouldHave(sizeGreaterThan(1))
                 .find(exactText("tortures a person"))
                 .click();
-
-        // handled above
+        // same as above
 //        for (WebElement spellElement : spellElements) {
 //            if (spellElement.getText().equals("tortures a person")) {
 //                spellElement.click();
 //            }
 //        }
 
+
+        $("div.modal-container")
+                .should(appear)
+                .shouldHave(text("Crucio"));
+        // same as above
 //        new WebDriverWait(driver, 10)
 //                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("div.modal-container")));
 //        WebElement modal = $(By.cssSelector("div.modal-container"));
 //        Assert.assertTrue(modal.getText().contains("Crucio"));
-        $("div.modal-container")
-                .should(appear)
-                .shouldHave(text("Crucio"));
     }
 
     @Test

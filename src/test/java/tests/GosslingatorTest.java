@@ -31,7 +31,7 @@ public class GosslingatorTest {
     @Test
     public void itShouldDisplayTitle() {
         // SELENIUM
-        Assert.assertEquals("GOSLINGATE ME", driver.findElement(By.cssSelector(".ryan-title")));
+        Assert.assertEquals("GOSLINGATE ME", driver.findElement(By.cssSelector(".ryan-title")).getText());
 
         // SELENIDE
         $(".ryan-title").shouldHave(exactText("GOSLINGATE ME"));
@@ -43,8 +43,9 @@ public class GosslingatorTest {
         driver.findElement(By.cssSelector("img"));  // will crash with elementNotFoundException
 
         // SELENIDE
-        // Selenide knows it is CSS selector, you need not specify with By.cssSelector()
-        $("img");  // Will NOT crash
+        $(By.cssSelector("img"));
+        // or simply
+        $("img");
     }
 
     @Test
@@ -80,7 +81,7 @@ public class GosslingatorTest {
                         "RYANS\n" +
                         "IS TOO DAMN\n" +
                         "HIGH",
-                $(By.cssSelector("h1.tooManyRyans")).getText()
+                driver.findElement(By.cssSelector("h1.tooManyRyans")).getText()
         );
     }
 
@@ -88,7 +89,7 @@ public class GosslingatorTest {
     @Test
     public void itShouldDisplayWarningMessageSelenide() {
         addRyan(50);
-        $(By.cssSelector("h1.tooManyRyans"))
+        $("h1.tooManyRyans")
                 .shouldHave(exactText(
                         "NUMBER OF\n" +
                         "RYANS\n" +
@@ -104,7 +105,6 @@ public class GosslingatorTest {
 
     @After
     public void tearDown() {
-        driver.close();
         driver.quit();
     }
 

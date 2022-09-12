@@ -25,7 +25,6 @@ public class FellowshipTest extends TestBase {
         open(BASE_URL + "/fellowship.php");
     }
 
-
     @Test
     public void itShouldContainNameForEachFellow() {
 
@@ -120,13 +119,13 @@ public class FellowshipTest extends TestBase {
     }
 
     private void selectFellow(String fellowName) {
-        // Plain old Selenium
+        // Explicit
         $(By.xpath("//h1[contains(text(),'" + fellowName + "')]")).click();
 
-        // Selenide thinks it is css selector, that is not true
+        // Implicitly selenide thinks it's css selector
         $("//h1[contains(text(),'" + fellowName + "')]").click();
 
-        // You specify x so Selenide is not confused
+        // Have to specify x - explicitly
         $x("//h1[contains(text(),'" + fellowName + "')]").click();
 
         // byText() simplifies some xpath

@@ -14,13 +14,12 @@ public class TestBase {
     @Before
     public void setUp() {
         System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/win/chromedriver.exe");
-        WebDriverRunner.setWebDriver(driver);
+        WebDriverRunner.setWebDriver(driver);  // otherwise selenide would open its own driver
         driver = new ChromeDriver();
     }
 
     @After
     public void tearDown() {
-        driver.close();
         driver.quit();
     }
 }
