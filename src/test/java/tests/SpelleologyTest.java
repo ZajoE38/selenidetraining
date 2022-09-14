@@ -26,9 +26,9 @@ public class SpelleologyTest extends TestBase {
         open("/spelleology.php");
     }
 
+    // STREAM
     @Test
     public void itShouldContainSpellsSelenium() {
-
         String[] spellsToBePresent = {
                 "counters sonorus",
                 "erases memories",
@@ -49,6 +49,7 @@ public class SpelleologyTest extends TestBase {
         }
     }
 
+    // COLLECTION, STREAM
     @Test
     public void itShouldContainSpellsSelenide() throws FileNotFoundException {
 
@@ -93,8 +94,7 @@ public class SpelleologyTest extends TestBase {
 
     @Test
     public void itShouldDisplayTortureSpell() {
-
-//        ElementsCollection spellElements = $$("ul.spells li").shouldHave(sizeGreaterThan(1));
+        // ElementsCollection spellElements = $$("ul.spells li").shouldHave(sizeGreaterThan(1));
         $("ul.spells li")
                 .findAll("li")
                 .shouldHave(sizeGreaterThan(1))
@@ -106,7 +106,6 @@ public class SpelleologyTest extends TestBase {
 //                spellElement.click();
 //            }
 //        }
-
 
         $("div.modal-container")
                 .should(appear)
@@ -123,7 +122,7 @@ public class SpelleologyTest extends TestBase {
         $("ul.spells")
                 .findAll("li")
                 .shouldHave(sizeGreaterThan(1))
-//                .filterBy(matchText("^shoots.*"))
+                // .filterBy(matchText("^shoots.*"))
                 .exclude(readonly)
                 .exclude(hidden)
                 .exclude(matchText("^opens.*"))

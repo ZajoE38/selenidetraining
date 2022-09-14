@@ -13,7 +13,7 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class SortingHatTest extends TestBase {
 
-
+    // OLD WAIT
     @Test
     public void itShouldDisplayNameOfHouse() {
         open("/sortinghat.php");
@@ -26,6 +26,7 @@ public class SortingHatTest extends TestBase {
 
     }
 
+    // CHAINING
     @Test
     public void itShouldDisplayNameOfHouseAlt() {
         open("/sortinghat.php");
@@ -36,6 +37,7 @@ public class SortingHatTest extends TestBase {
         $("p.result").shouldBe(visible).shouldNotBe(empty);
     }
 
+    // MORE CHAINING
     @Test
     public void itShouldDisplayGriffindor() {
         open("/sortinghat.php");
@@ -48,6 +50,6 @@ public class SortingHatTest extends TestBase {
                     .shouldNotBe(empty)
                     .getText();
         }
-
     }
+
 }

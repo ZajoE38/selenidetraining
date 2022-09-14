@@ -20,34 +20,37 @@ import static com.codeborne.selenide.Selenide.*;
 
 public class FellowshipTest extends TestBase {
 
+    // OPEN
     @Before
     public void openPage() {
-//        open(BASE_URL + "/fellowship.php");
+        // open(BASE_URL + "/fellowship.php");
         open("/fellowship.php"); // uses baseurl defined in static
         open(""); // opens base url
     }
 
+    // COLLECTION
     @Test
     public void itShouldContainNameForEachFellow() {
 
-//        List<WebElement> fellowElements = getFellowElements();
+        // List<WebElement> fellowElements = getFellowElements();
         ElementsCollection fellowElements = getFellowElements();
 
         for (SelenideElement fellowElement : fellowElements) {
-//            Assert.assertFalse(fellowElement.findElement(By.cssSelector("h1")).getText().isEmpty());
+            // Assert.assertFalse(fellowElement.findElement(By.cssSelector("h1")).getText().isEmpty());
             fellowElement.find("h1").shouldNotBe(empty);
         }
     }
 
+    // COLLECTION
     @Test
     public void itShouldContainSpecifiedFellows() {
 
-//        List<WebElement> fellowElements = getFellowElements();
+        // List<WebElement> fellowElements = getFellowElements();
         ElementsCollection fellowElements = getFellowElements();
         List<String> fellowNames = new ArrayList<String>();
 
         for (SelenideElement fellowElement : fellowElements) {
-//            fellowNames.add(fellowElement.findElement(By.cssSelector("h1")).getText());
+            // fellowNames.add(fellowElement.findElement(By.cssSelector("h1")).getText());
             fellowNames.add(fellowElement.find("h1").getText());
         }
 
@@ -70,14 +73,15 @@ public class FellowshipTest extends TestBase {
             selectFellow(fellowToSelect);
         }
 
-//        Assert.assertEquals("Complete", $("div.points-left h3").getText());
+        // Assert.assertEquals("Complete", $("div.points-left h3").getText());
         $("div.points-left h3").shouldHave(text("Complete"));
     }
 
-    @Test // STREAM
+    // STREAM
+    @Test
     public void itShouldDisplayPointsForEachFellow() {
 
-//        List<WebElement> displayedFellows = getFellowElements();
+        // List<WebElement> displayedFellows = getFellowElements();
         ElementsCollection displayedFellows = getFellowElements();
 
         displayedFellows.forEach(selenideElement -> selenideElement
@@ -92,6 +96,7 @@ public class FellowshipTest extends TestBase {
 //        }
     }
 
+    // STREAM
     @Test
     public void itShouldHighlightFellows() {
         List<String> fellowsToSelect = new ArrayList<String>();
@@ -120,6 +125,7 @@ public class FellowshipTest extends TestBase {
         }
     }
 
+    // XPATH
     private void selectFellow(String fellowName) {
         // Implicitly selenide thinks it's css selector
         $("//h1[contains(text(),'" + fellowName + "')]").click();
@@ -138,6 +144,7 @@ public class FellowshipTest extends TestBase {
 //        return driver.findElements(By.cssSelector("ul.list-of-fellows li"));
 //    }
 
+    // COLLECTION
     private ElementsCollection getFellowElements() {
         return $$("ul.list-of-fellows li");
     }

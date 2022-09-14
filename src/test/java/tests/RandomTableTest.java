@@ -23,13 +23,11 @@ public class RandomTableTest extends TestBase {
 
     @Test
     public void itShouldDisplaySecondRow() {
-        // Selenium
-        System.out.println(driver.findElement(By.xpath("//table/body/tr[2]/td[4]"))
-                .getText());
+        // SELENIUM
+        driver.findElement(By.xpath("//table/body/tr[2]/td[4]"));
 
-        // Selenide
-        System.out.println($("table > tbody > tr",1).find("td", 3)
-                .getText());
+        // SELENIDE
+        $("table > tbody > tr", 1).find("td", 3);
     }
 
     @Test
@@ -49,7 +47,8 @@ public class RandomTableTest extends TestBase {
         }
     }
 
-    @Test // SCROLL
+    // SCROLL
+    @Test
     public void itShouldScrollToLastElement() {
         // WebElement lastRow = driver.findElement(By.cssSelector("table > tbody > tr:last-child"));
         // ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", lastRow);

@@ -50,6 +50,7 @@ public class GosslingatorTest extends TestBase {
         $("img");
     }
 
+    // SOFT ASSERT
     @Test
     public void itShouldAddOneRyan() {
         Configuration.assertionMode = AssertionMode.SOFT;
@@ -71,9 +72,7 @@ public class GosslingatorTest extends TestBase {
 //        Assert.assertEquals("2", actualNumberOfRyans);
 //        Assert.assertEquals("ryans", actualRyanDescription);
 
-        SelenideElement counter = $("ryanCounter");  // this will be in Page Object
-        counter.shouldHave(exactText("2"));
-
+        $("ryanCounter").shouldHave(exactText("2"));
         $("div.ryan-counter h3").shouldHave(exactText("ryans"));
     }
 
@@ -105,14 +104,17 @@ public class GosslingatorTest extends TestBase {
 
     @Test
     public void itShouldDisplayNoRyanOnPageOpen() {
-        Assert.assertEquals(0, driver.findElements(By.cssSelector("img")).size());
+        // Assert.assertEquals(0, driver.findElements(By.cssSelector("img")).size());
+        $("img").shouldHave(exactText("0"));
     }
 
-    @Test  // JAVASCRIPT EXECUTOR
+    // JAVASCRIPT EXECUTOR
+    @Test
     public void itShouldRemoveRyanHeadByClickingOnIt() {
         Configuration.clickViaJs = true;
         addRyan(30);
-//        $$("img").forEach(SelenideElement::click);  // deprecated
+
+        // $$("img").forEach(SelenideElement::click);  // deprecated
         ElementsCollection ryans = $$("img");
         for (SelenideElement ryan : ryans) {
             ryan.click();
@@ -129,4 +131,5 @@ public class GosslingatorTest extends TestBase {
             addRyanButton.click();
         }
     }
+
 }

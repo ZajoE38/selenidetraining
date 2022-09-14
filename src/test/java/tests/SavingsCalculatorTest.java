@@ -22,16 +22,16 @@ public class SavingsCalculatorTest extends TestBase {
     @Before
     public void openPage() {
         open("/savingscalculator.php");
-        // savingsCalculatorPage = new SavingsCalculatorPage(driver);
+        // savingsCalculatorPage = new SavingsCalculatorPage(driver);  // No Page Factory
         savingsCalculatorPage = new SavingsCalculatorPage();
     }
 
     @Test
     public void itShouldEnterOneTimeInvestment(){
-        // Selenium
+        // SELENIUM
         driver.findElement(By.xpath("//input[@placeholder='One tome investment']"));
 
-        // Selenide
+        // SELENIDE
         $(byAttribute("placeholder", "One time investment"));
     }
 
@@ -53,6 +53,8 @@ public class SavingsCalculatorTest extends TestBase {
         savingsCalculatorPage.enterYears(20);
         savingsCalculatorPage.enterEmail("info@furbo.sk");
 
+        /* I would rather have validating method in PO,
+        because you have to add either method regardless */
         // assertFalse(savingsCalculatorPage.getCalculatedTotalIncomeElement().getText().isEmpty());
         savingsCalculatorPage.getCalculatedTotalIncomeElement().shouldNotBe(empty);
 
@@ -74,8 +76,8 @@ public class SavingsCalculatorTest extends TestBase {
                 .shouldHave(text("kr"));
     }
 
-
-    @Test // BECAUSE
+    // BECAUSE
+    @Test
     public void itShouldContainFundNameInNewRequest() {
         String fundToSelect = "Hoggwart's Fund";
         savingsCalculatorPage.selectFund(fundToSelect);
