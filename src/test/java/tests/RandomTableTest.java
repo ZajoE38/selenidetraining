@@ -18,7 +18,7 @@ public class RandomTableTest extends TestBase {
 
     @Before
     public void openPage() {
-        open(BASE_URL + "/tabulka.php");
+        open("/tabulka.php");
     }
 
     @Test

@@ -16,7 +16,7 @@ public class SortingHatTest extends TestBase {
 
     @Test
     public void itShouldDisplayNameOfHouse() {
-        open(BASE_URL + "/sortinghat.php");
+        open("/sortinghat.php");
         $(By.cssSelector("button")).click();
         new WebDriverWait(driver, 10)
             .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("img.loading")));
@@ -28,7 +28,7 @@ public class SortingHatTest extends TestBase {
 
     @Test
     public void itShouldDisplayNameOfHouseAlt() {
-        open(BASE_URL + "/sortinghat.php");
+        open("/sortinghat.php");
         $("button").click();
         $("img.loading").should(appear);
         $("img.loading").should(disappear);
@@ -38,7 +38,7 @@ public class SortingHatTest extends TestBase {
 
     @Test
     public void itShouldDisplayGriffindor() {
-        open(BASE_URL + "/sortinghat.php");
+        open("/sortinghat.php");
         String house = "";
         while (!house.equals("Gryffindor")) {
             $("button").shouldBe(enabled).click();

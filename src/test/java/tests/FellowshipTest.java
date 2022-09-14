@@ -22,7 +22,9 @@ public class FellowshipTest extends TestBase {
 
     @Before
     public void openPage() {
-        open(BASE_URL + "/fellowship.php");
+//        open(BASE_URL + "/fellowship.php");
+        open("/fellowship.php"); // uses baseurl defined in static
+        open(""); // opens base url
     }
 
     @Test
@@ -72,7 +74,7 @@ public class FellowshipTest extends TestBase {
         $("div.points-left h3").shouldHave(text("Complete"));
     }
 
-    @Test
+    @Test // STREAM
     public void itShouldDisplayPointsForEachFellow() {
 
 //        List<WebElement> displayedFellows = getFellowElements();
@@ -119,13 +121,13 @@ public class FellowshipTest extends TestBase {
     }
 
     private void selectFellow(String fellowName) {
-        // Explicit
-        $(By.xpath("//h1[contains(text(),'" + fellowName + "')]")).click();
-
         // Implicitly selenide thinks it's css selector
         $("//h1[contains(text(),'" + fellowName + "')]").click();
 
-        // Have to specify x - explicitly
+        // Need to specify explicitly
+        $(By.xpath("//h1[contains(text(),'" + fellowName + "')]")).click();
+
+        // shorthand for xpath
         $x("//h1[contains(text(),'" + fellowName + "')]").click();
 
         // byText() simplifies some xpath

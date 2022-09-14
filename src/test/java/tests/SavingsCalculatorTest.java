@@ -16,11 +16,12 @@ import static org.junit.Assert.*;
 import static org.openqa.selenium.By.cssSelector;
 
 public class SavingsCalculatorTest extends TestBase {
+
     private SavingsCalculatorPage savingsCalculatorPage;
 
     @Before
     public void openPage() {
-        open(BASE_URL.concat("/savingscalculator.php"));
+        open("/savingscalculator.php");
         // savingsCalculatorPage = new SavingsCalculatorPage(driver);
         savingsCalculatorPage = new SavingsCalculatorPage();
     }

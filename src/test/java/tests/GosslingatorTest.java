@@ -1,11 +1,11 @@
 package tests;
 
-import com.codeborne.selenide.SelenideElement;
-import com.codeborne.selenide.WebDriverRunner;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import base.TestBase;
+import com.codeborne.selenide.*;
+import com.codeborne.selenide.junit5.ScreenShooterExtension;
+import com.codeborne.selenide.junit5.SoftAssertsExtension;
+import com.codeborne.selenide.junit5.TextReportExtension;
+import org.junit.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,19 +13,21 @@ import org.openqa.selenium.chrome.ChromeDriver;
 
 import static com.codeborne.selenide.Condition.exactText;
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
-public class GosslingatorTest {
+public class GosslingatorTest extends TestBase {
 
-    private WebDriver driver;
+    @Rule
+    public TextReportExtension textReport = new TextReportExtension()
+            .onSucceededTest(true)
+            .onFailedTest(true);
+
+    @Rule
+    public SoftAssertsExtension softAsserts = new SoftAssertsExtension();
 
     @Before
     public void setUp() {
-        System.setProperty("webdriver.chrome.driver", "src/test/resources/drivers/win/chromedriver.exe");
-        driver = new ChromeDriver();
-        WebDriverRunner.setWebDriver(driver);  // otherwise, selenide would open its own driver
-        open("http://localhost:80/gosslingator.php");
+        open("/gosslingator.php");
     }
 
     @Test
@@ -50,11 +52,14 @@ public class GosslingatorTest {
 
     @Test
     public void itShouldAddOneRyan() {
+        Configuration.assertionMode = AssertionMode.SOFT;
         addRyan();
-
+        screenshot("nazovFilu");
         $("div.ryan-counter h2").shouldHave(text("1"));
         $("div.ryan-counter h3").shouldHave(text("ryan"));
     }
+
+
 
     @Test
     public void itShouldTwoRyans() {
@@ -103,9 +108,15 @@ public class GosslingatorTest {
         Assert.assertEquals(0, driver.findElements(By.cssSelector("img")).size());
     }
 
-    @After
-    public void tearDown() {
-        driver.quit();
+    @Test  // JAVASCRIPT EXECUTOR
+    public void itShouldRemoveRyanHeadByClickingOnIt() {
+        Configuration.clickViaJs = true;
+        addRyan(30);
+//        $$("img").forEach(SelenideElement::click);  // deprecated
+        ElementsCollection ryans = $$("img");
+        for (SelenideElement ryan : ryans) {
+            ryan.click();
+        }
     }
 
     private void addRyan() {
